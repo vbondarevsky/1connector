@@ -13,6 +13,8 @@
 ## Пример работы
 ```bsl
 Результат = КоннекторHTTP.Get("https://api.github.com/events").Json();
+Результат = КоннекторHTTP.Get("https://api.github.com/events").Текст();
+Результат = КоннекторHTTP.Get("https://api.github.com/events").ДвоичныеДанные();
 ```
 
 ## Возможности
