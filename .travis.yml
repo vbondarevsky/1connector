@@ -26,6 +26,7 @@ jdk:
 before_install:
  # Load cached docker images
   - if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
+  - wget -O bsl-language-server.jar https://github.com/1c-syntax/bsl-language-server/releases/download/v0.3.0/bsl-language-server-0.3.0.jar
 
 before_cache: 
   # Save tagged docker images
