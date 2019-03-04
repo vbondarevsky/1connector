@@ -39,7 +39,7 @@ https://github.com/EvilBeaver/OneScript/issues/856
 ## Установка
 
 Для установки необходимо:
-* Скачать файл configor.ospx из раздела [releases](https://github.com/vbondarevsky/1connector/releases)
+* Скачать файл 1connector-*.ospx из раздела [releases](https://github.com/vbondarevsky/1connector/releases)
 * Воспользоваться командой:
 
 ```
