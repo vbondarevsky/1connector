@@ -53,8 +53,8 @@ opm install 1connector
 
 ## Публичный интерфейс
 
-[Документация публичного интерфейса](docs/README.md)
+[Документация публичного интерфейса](https://github.com/vbondarevsky/1connector/blob/develop/docs/README.md)
 
 ## Лицензия
 
-Смотри файл [LICENSE](LICENSE).
+Смотри файл [LICENSE](https://github.com/vbondarevsky/1connector/blob/develop/LICENSE).
