@@ -2,7 +2,7 @@
 
 [![Stars](https://img.shields.io/github/stars/vbondarevsky/1connector.svg?label=Github%20%E2%98%85&a)](https://github.com/vbondarevsky/1connector/stargazers)
 [![Release](https://img.shields.io/github/tag/vbondarevsky/1connector.svg?label=Last%20release&a)](https://github.com/vbondarevsky/1connector/releases)
-[![Открытый чат проекта https://gitter.im/EvilBeaver/oscript-library](https://badges.gitter.im/vbondarevsky/1connector.png)](https://gitter.im/EvilBeaver/oscript-library)
+[![Чат по движку OneScript и библиотеке пакетов oscript-library](https://github.com/Patrolavia/telegram-badge/blob/master/chat.svg)](https://t.me/oscript_library)
 
 [![Build Status](https://travis-ci.org/vbondarevsky/1connector.svg?branch=master)](https://travis-ci.org/vbondarevsky/1connector)
 
