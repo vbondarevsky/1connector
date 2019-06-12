@@ -1,0 +1,8 @@
+*.ospx
+tests.xml
+coverage/
+tests-reports/
+.sonar/
+.sonarlint/
+.scannerwork/
+bdd-log.xml
