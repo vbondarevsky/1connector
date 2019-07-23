@@ -21,7 +21,7 @@ addons:
     sonarqube: true
   
 jdk:
-  - oraclejdk8
+  - openjdk11
 
 before_install:
  # Load cached docker images
