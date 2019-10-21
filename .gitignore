@@ -6,3 +6,4 @@ tests-reports/
 .sonarlint/
 .scannerwork/
 bdd-log.xml
+.vscode/
