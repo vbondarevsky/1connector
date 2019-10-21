@@ -1,5 +1,6 @@
 # 1connector - удобный HTTP-клиент для oscript
 
+[![Quality Gate Status](https://sonar.openbsl.ru/api/project_badges/measure?project=1connector&metric=alert_status)](https://sonar.openbsl.ru/dashboard?id=1connector)
 [![Stars](https://img.shields.io/github/stars/vbondarevsky/1connector.svg?label=Github%20%E2%98%85&a)](https://github.com/vbondarevsky/1connector/stargazers)
 [![Release](https://img.shields.io/github/tag/vbondarevsky/1connector.svg?label=Last%20release&a)](https://github.com/vbondarevsky/1connector/releases)
 [![Чат по движку OneScript и библиотеке пакетов oscript-library](https://github.com/Patrolavia/telegram-badge/blob/master/chat.svg)](https://t.me/oscript_library)
