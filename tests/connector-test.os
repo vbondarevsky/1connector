@@ -341,10 +341,14 @@
 
 Процедура ТестДолжен_ПроверитьЧтоРаботаетУстановкаCookies() Экспорт
 	
-	Результат = КоннекторHTTP.Get("http://httpbin.org/cookies/set/PHPSESSID/72a68cc1e55a4fbb9c0b8dbbeb49ca4f").Json();
-	
-	Ожидаем.Что(Результат["cookies"]["PHPSESSID"]).Равно("72a68cc1e55a4fbb9c0b8dbbeb49ca4f");
-	
+	Результат = КоннекторHTTP.Get(
+		"http://httpbin.org/cookies/set?PHPSESSID=72a68cc1e55&cookie1=1&cookie2=2&other=test").Json();
+
+	Ожидаем.Что(Результат["cookies"]["PHPSESSID"]).Равно("72a68cc1e55");
+	Ожидаем.Что(Результат["cookies"]["cookie1"]).Равно("1");
+	Ожидаем.Что(Результат["cookies"]["cookie2"]).Равно("2");
+	Ожидаем.Что(Результат["cookies"]["other"]).Равно("test");
+
 КонецПроцедуры
 
 Процедура ТестДолжен_ПроверитьЧтоРаботаетОтправкаCookies() Экспорт
