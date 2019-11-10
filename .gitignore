@@ -1,6 +1,6 @@
 *.ospx
 tests.xml
-coverage/
+out/
 tests-reports/
 .sonar/
 .sonarlint/
