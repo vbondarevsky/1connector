@@ -20,7 +20,7 @@ jdk:
   - openjdk11
 
 before_install: 
-  - wget -O os.deb http://oscript.io/downloads/night-build/deb
+  - wget -O os.deb http://oscript.io/downloads/1_2_0/x64/onescript-engine_1.2.0_all.deb
   - sudo dpkg -i os.deb; sudo apt install -f
   - oscript
 
