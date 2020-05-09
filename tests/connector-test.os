@@ -1,8 +1,10 @@
 #Использовать asserts
 #Использовать "../src"
 
+// BSLLS:NestedFunctionInParameters-off
+// BSLLS:UnusedParameters-off
 Функция ПолучитьСписокТестов(МенеджерТестирования) Экспорт
-
+// BSLLS:UnusedParameters-on
 	МассивТестов = Новый Массив;
 	МассивТестов.Добавить("ТестДолжен_ПроверитьЧтоРаботаютПараметрыЗаписиJson");
 	МассивТестов.Добавить("ТестДолжен_ПроверитьЧтоРаботаютЗапросыБезУказанияСхемыURL");
@@ -71,9 +73,11 @@
  	Ответ = КоннекторHTTP.Get("https://httpbin.org/anything/params", ПараметрыЗапроса);
 	Результат = Ответ.Json();
 
+	// BSLLS:LineLength-off
 	Ожидаем.Что(Ответ.URL).Равно(
 		"https://httpbin.org/anything/params?name=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&name=Petrov&salary=100000&time=01%3A47");
- 	Ожидаем.Что(Результат).ИмеетТип("Соответствие");
+	// BSLLS:LineLength-on 
+	Ожидаем.Что(Результат).ИмеетТип("Соответствие");
 	Ожидаем.Что(Результат["url"]).Равно(
 		"https://httpbin.org/anything/params?name=Иванов&name=Petrov&salary=100000&time=01:47");
 	Ожидаем.Что(Результат["args"]).ИмеетТип("Соответствие");
