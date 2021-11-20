@@ -9,11 +9,13 @@ on: [push, pull_request]
 jobs:
   build:
     runs-on: ${{ matrix.os }}
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest]
-        oscript_version: ['1.4.0']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        oscript_version: ['1.2.0', 'dev', 'stable']
         
     steps:
       # Загрузка проекта
@@ -22,7 +24,7 @@ jobs:
 
       # Установка OneScript конкретной версии
       - name: Установка OneScript
-        uses: otymko/setup-onescript@v1.0
+        uses: otymko/setup-onescript@v1.1
         with:
           version: ${{ matrix.oscript_version }}
 

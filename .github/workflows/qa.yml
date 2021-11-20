@@ -9,6 +9,8 @@ jobs:
   build:
     if: github.repository == 'vbondarevsky/1connector'
     runs-on: ${{ matrix.os }}
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -28,7 +30,7 @@ jobs:
 
       # Установка OneScript конкретной версии
       - name: Установка OneScript
-        uses: otymko/setup-onescript@v1.0
+        uses: otymko/setup-onescript@v1.1
         with:
           version: ${{ matrix.oscript_version }}
 
