@@ -11,6 +11,11 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      AWS4_SQS_ACCESSKEYID: ${{ secrets.AWS4_SQS_ACCESSKEYID }}
+      AWS4_SQS_QUEUE: ${{ secrets.AWS4_SQS_QUEUE }}
+      AWS4_SQS_REGION: ${{ secrets.AWS4_SQS_REGION }}
+      AWS4_SQS_SECRETKEY: ${{ secrets.AWS4_SQS_SECRETKEY }}
     strategy:
       fail-fast: false
       matrix:
