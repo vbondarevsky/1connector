@@ -7,8 +7,8 @@
 [![Release](https://img.shields.io/github/tag/vbondarevsky/1connector.svg?label=Last%20release&a)](https://github.com/vbondarevsky/1connector/releases)
 [![Чат по движку OneScript и библиотеке пакетов oscript-library](https://github.com/Patrolavia/telegram-badge/blob/master/chat.svg)](https://t.me/oscript_library)
 
-Библиотека берет на себя всю рутину работы с HTTP запросами. 
-Буквально в одну строку можно получать данные, отправлять, не заботясь о необходимости конструирования URL, кодирования данных и т.п. 
+Библиотека берет на себя всю рутину работы с HTTP запросами.
+Буквально в одну строку можно получать данные, отправлять, не заботясь о необходимости конструирования URL, кодирования данных и т.п.
 В общем библиотека очень мощная и проста в использовании.
 
 ## Пример работы

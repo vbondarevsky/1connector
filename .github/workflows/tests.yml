@@ -21,7 +21,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         oscript_version: ['1.2.0', 'dev', 'stable']
-        
+
     steps:
       # Загрузка проекта
       - name: Актуализация
@@ -38,7 +38,7 @@ jobs:
         run: |
           opm install opm
           opm install --dev
-          
+
       # Задача тестирования, в результате ожидается успешное выполнение
       - name: Тестирование
         run: oscript ./tasks/test.os
