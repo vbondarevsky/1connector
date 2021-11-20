@@ -62,7 +62,7 @@ jobs:
         if: github.event_name == 'push'
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
-            -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }}
+            -Dsonar.host.url=https://sonar.openbsl.ru
             -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
             -Dsonar.projectVersion=${{ steps.extract_version.outputs.version }}
 
@@ -72,7 +72,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: sonar-scanner
             -Dsonar.login=${{ secrets.SONARQUBE_TOKEN }}
-            -Dsonar.host.url=${{ secrets.SONARQUBE_HOST }}
+            -Dsonar.host.url=https://sonar.openbsl.ru
             -Dsonar.branch.name=${{ steps.extract_branch.outputs.branch }}
             -Dsonar.pullrequest.key=${{ github.event.pull_request.number }}
             -Dsonar.pullrequest.branch=${{ github.event.pull_request.head.ref }}
