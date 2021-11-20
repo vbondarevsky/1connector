@@ -38,7 +38,6 @@ jobs:
       - name: Установка зависимостей
         run: |
           opm install opm
-          cd ./src
           opm install --dev
 
       # Запуск тестов и сбор покрытия кода
