@@ -79,7 +79,6 @@
 // BSLLS:ExportVariables-on
 // BSLLS:MissingVariablesDescription-on
 
-
 // Возвращает текстовое представление переданного кода состояния HTTP.
 //
 // Параметры:
