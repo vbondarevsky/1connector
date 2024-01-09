@@ -20,7 +20,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        oscript_version: ['1.2.0', 'dev', 'stable']
+        oscript_version: ['1.8.3']
 
     steps:
       # Загрузка проекта
