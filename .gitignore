@@ -2,6 +2,7 @@
 tests.xml
 out/
 tests-reports/
+oscript_modules/
 .sonar/
 .sonarlint/
 .scannerwork/
