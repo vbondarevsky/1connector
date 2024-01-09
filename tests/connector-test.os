@@ -68,23 +68,23 @@
 	ПараметрыЗапроса = Новый Структура;
 	ПараметрыЗапроса.Вставить("name", СтрРазделить("Иванов,Petrov", ","));
 	ПараметрыЗапроса.Вставить("salary", Формат(100000, "ЧГ="));
-	ПараметрыЗапроса.Вставить("time", "01:47");
+	ПараметрыЗапроса.Вставить("time", "01_47");
 
  	Ответ = КоннекторHTTP.Get("https://connectorhttp.ru/anything/params", ПараметрыЗапроса);
 	Результат = Ответ.Json();
 
 	// BSLLS:LineLength-off
 	Ожидаем.Что(Ответ.URL).Равно(
-		"https://connectorhttp.ru/anything/params?name=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&name=Petrov&salary=100000&time=01%3A47");
+		"https://connectorhttp.ru/anything/params?name=%D0%98%D0%B2%D0%B0%D0%BD%D0%BE%D0%B2&name=Petrov&salary=100000&time=01_47");
 	// BSLLS:LineLength-on
 	Ожидаем.Что(Результат).ИмеетТип("Соответствие");
 	Ожидаем.Что(Результат["url"]).Равно(
-		"https://connectorhttp.ru/anything/params?name=Иванов&name=Petrov&salary=100000&time=01:47");
+		"https://connectorhttp.ru/anything/params?name=Иванов&name=Petrov&salary=100000&time=01_47");
 	Ожидаем.Что(Результат["args"]).ИмеетТип("Соответствие");
 	Ожидаем.Что(Результат["args"]["salary"]).Равно("100000");
 	Ожидаем.Что(Результат["args"]["name"]).ИмеетТип("Массив");
 	Ожидаем.Что(СтрСоединить(Результат["args"]["name"], ",")).Равно("Иванов,Petrov");
-	Ожидаем.Что(Результат["args"]["time"]).Равно("01:47");
+	Ожидаем.Что(Результат["args"]["time"]).Равно("01_47");
 
 КонецПроцедуры
 
