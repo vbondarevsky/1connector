@@ -2,56 +2,65 @@
 # Copyright (C) 2020 Tymko Oleg <olegtymko@yandex.ru> and contributors
 # All rights reserved.
 
+
 name: Подготовка релиза и публикация в хабе
-# Только события создания и изменения релиза
 on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest]
-        oscript_version: ["1.8.3"]
-        package_mask: ["1connector-*.ospx"]
-
+  validate:
+    runs-on: ubuntu-22.04
     steps:
-      # Загрузка проекта
-      - name: Актуализация
-        uses: actions/checkout@v2
-
-      # Установка OneScript конкретной версии
-      - name: Установка OneScript
-        uses: otymko/setup-onescript@v1.1
+      - uses: actions/checkout@v7.0.1
         with:
-          version: ${{ matrix.oscript_version }}
-
-      # Установка зависимостей пакета
-      - name: Установка зависимостей
+          persist-credentials: false
+      - name: Проверка версии релиза
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: |
-          opm install opm
-          opm install
-
-      - name: Сборка пакета
-        run: opm build
-
-      - name: Заливка артифактов
-        uses: actions/upload-artifact@v2
+          version=$(sed -n 's/.*\.Версия("\([0-9.]*\)").*/\1/p' packagedef)
+          test -n "$version"
+          test "$RELEASE_TAG" = "v$version"
+  tests:
+    needs: validate
+    uses: ./.github/workflows/tests.yml
+  quality:
+    needs: validate
+    uses: ./.github/workflows/qa.yml
+    secrets: inherit
+  publish:
+    needs: [tests, quality]
+    uses: autumn-library/workflows/.github/workflows/release.yml@v1
+    with:
+      oscript_version: default
+      opm_version: '1.7.1'
+      dotnet_version: '8.0.x'
+      os_version: ubuntu-22.04
+      package_mask: 1connector-*.ospx
+    secrets:
+      PUSH_TOKEN: ${{ secrets.OSHUB_TOKEN }}
+  attach:
+    needs: publish
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8.0.2
         with:
           name: package.zip
-          path: ./${{ matrix.package_mask }}
-
-      - name: Заливка в релиз
-        uses: AButler/upload-release-assets@v1.0
-        with:
-          files: ./${{ matrix.package_mask }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Публикация в hub.oscript.io
-        shell: bash
-        run: opm push -f ./${{ matrix.package_mask }} --token ${{ env.TOKEN }} -c stable
+          path: package
+      - name: Загрузка пакета в GitHub Release
         env:
-          TOKEN: ${{ secrets.OSHUB_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          shopt -s nullglob
+          packages=(package/1connector-*.ospx)
+          test "${#packages[@]}" = 1
+          test "${packages[0]}" = "package/1connector-${RELEASE_TAG#v}.ospx"
+          gh release upload "$RELEASE_TAG" "${packages[0]}"

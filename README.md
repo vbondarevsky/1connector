@@ -34,7 +34,7 @@
 - И многое другое
 
 ## Требования
-Платформа **1.2.0** и выше.
+Платформа **2.2.0** и выше.
 
 ## Установка
 
@@ -58,3 +58,31 @@ opm install 1connector
 ## Лицензия
 
 Смотри файл [LICENSE](https://github.com/vbondarevsky/1connector/blob/develop/LICENSE).
+
+## Разработка и проверки
+
+CI использует общие workflows `autumn-library/workflows@v1` для тестирования,
+анализа качества и публикации. Версия OneScript берётся из `ВерсияСреды()` в
+`packagedef` (2.2.0), opm закреплён на 1.7.1. Обновления GitHub Actions
+отслеживает Dependabot.
+
+Зависимости устанавливаются локально в `oscript_modules`; поиск библиотек
+настроен в `tasks/oscript.cfg` и `tests/oscript.cfg`.
+
+```sh
+opm install opm@1.7.1
+opm install -l --dev
+oscript ./tasks/test.os
+oscript ./tasks/coverage.os
+opm build .
+```
+
+HTTP-тесты обращаются к внешним сервисам, включая `connectorhttp.ru`.
+Их доступность влияет на результат полного прогона.
+Отчёт тестов и отчёты покрытия находятся в `out/`.
+
+Для Sonar используется существующий секрет `SONARQUBE_TOKEN`, для хаба —
+`OSHUB_TOKEN`. Доверенная публикация через OIDC не включена.
+Публикация GitHub Release запускает проверки, затем общий workflow собирает
+и публикует пакет в хабе, а отдельный job прикрепляет его к GitHub Release.
+Тег должен совпадать с версией `packagedef` в формате `vX.Y.Z`.
