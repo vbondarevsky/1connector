@@ -2,43 +2,19 @@
 # Copyright (C) 2020 Tymko Oleg <olegtymko@yandex.ru> and contributors
 # All rights reserved.
 
+
 name: Тестирование
-# Любой пуш и pr в проекте
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch, workflow_call]
+
+permissions:
+  contents: read
 
 jobs:
-  build:
-    runs-on: ${{ matrix.os }}
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: 'true'
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      AWS4_SQS_ACCESSKEYID: ${{ secrets.AWS4_SQS_ACCESSKEYID }}
-      AWS4_SQS_QUEUE: ${{ secrets.AWS4_SQS_QUEUE }}
-      AWS4_SQS_REGION: ${{ secrets.AWS4_SQS_REGION }}
-      AWS4_SQS_SECRETKEY: ${{ secrets.AWS4_SQS_SECRETKEY }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        oscript_version: ['1.8.3']
-
-    steps:
-      # Загрузка проекта
-      - name: Актуализация
-        uses: actions/checkout@v2
-
-      # Установка OneScript конкретной версии
-      - name: Установка OneScript
-        uses: otymko/setup-onescript@v1.1
-        with:
-          version: ${{ matrix.oscript_version }}
-
-      # Установка зависимостей пакета
-      - name: Установка зависимостей
-        run: |
-          opm install opm
-          opm install --dev
-
-      # Задача тестирования, в результате ожидается успешное выполнение
-      - name: Тестирование
-        run: oscript ./tasks/test.os
+  test:
+    uses: autumn-library/workflows/.github/workflows/test.yml@v1
+    with:
+      oscript_version: default
+      opm_version: '1.7.1'
+      dotnet_version: '8.0.x'
+      os_versions: '["ubuntu-22.04", "windows-2022", "macos-15"]'
+      build_package: true
