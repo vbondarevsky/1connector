@@ -1,0 +1,106 @@
+name: Разовый выпуск 3.0.0
+
+on:
+  push:
+    branches: [release/3.0.0-publish-once]
+    paths:
+      - .github/workflows/release-3.0.0-once.yml
+      - tasks/test-release-3.0.0.os
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-1connector-3.0.0-once
+  cancel-in-progress: false
+
+env:
+  RELEASE_COMMIT: 9dd4410e8c973ec64e4e958888fe233303a7fd78
+
+jobs:
+  validate:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Проверка исходников и версии
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git merge-base --is-ancestor "$RELEASE_COMMIT" origin/master
+          git diff --exit-code "$RELEASE_COMMIT" HEAD -- . \
+            ':(exclude).github/workflows/release-3.0.0-once.yml' \
+            ':(exclude)tasks/test-release-3.0.0.os'
+          version=$(sed -n 's/.*\.Версия("\([0-9.]*\)").*/\1/p' packagedef)
+          test "$version" = 3.0.0
+          tags=$(gh api --paginate "repos/$GITHUB_REPOSITORY/tags" --jq '.[].name')
+          if grep -Fxq v3.0.0 <<< "$tags"; then
+            echo '::error::Tag v3.0.0 already exists; refusing another publication.'
+            exit 1
+          fi
+  offline:
+    needs: validate
+    uses: autumn-library/workflows/.github/workflows/test.yml@v1
+    with:
+      oscript_version: default
+      opm_version: '1.7.1'
+      dotnet_version: '8.0.x'
+      os_versions: '["ubuntu-22.04", "windows-2022", "macos-15"]'
+      build_package: true
+      test_script_path: ./tasks/test-release-3.0.0.os
+  publish:
+    needs: offline
+    uses: autumn-library/workflows/.github/workflows/release.yml@v1
+    with:
+      oscript_version: default
+      opm_version: '1.7.1'
+      dotnet_version: '8.0.x'
+      os_version: ubuntu-22.04
+      package_mask: 1connector-3.0.0.ospx
+    secrets:
+      PUSH_TOKEN: ${{ secrets.OSHUB_TOKEN }}
+  github-release:
+    needs: publish
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v8.0.2
+        with:
+          name: package.zip
+          path: package
+      - name: Публикация GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          test -s package/1connector-3.0.0.ospx
+          cat > release-notes.md <<'NOTES'
+          ## Несовместимое изменение
+
+          Минимальная версия OneScript повышена до **2.2.0**, поэтому версия пакета повышена до **3.0.0**. На более старой платформе используйте совместимую версию библиотеки из ветки 2.x.
+
+          ## Изменения
+
+          - Изменения конкурентного пула соединений и обход снимка карты вместо живой карты: #47, #48.
+          - Переход CI на общие workflows: #49.
+          - Повышение major-версии: #50.
+
+          ## Проверки и известное ограничение
+
+          Перед публикацией выполнены сборка и offline-тесты на Linux, Windows и macOS. Полные HTTP-тесты и сбор покрытия не являются блокирующими проверками **только для этого выпуска**, по решению сопровождающего.
+
+          **Конкурентный тест пула нестабилен на OneScript 2.2.0:** при локальной подготовке он упал в 1 из 5 прогонов без покрытия с `System.InvalidOperationException: Operations that change non-concurrent collections must have exclusive access`. Причина не установлена; это ограничение не следует считать исправленным. Публикация с этой известной нестабильностью явно согласована. Остальные offline-тесты обязательны.
+
+          Ошибки внешнего сервиса `connectorhttp.ru` не исправлялись. Штатный release-workflow и требования к следующим выпускам не изменены.
+
+          **Все изменения:** https://github.com/vbondarevsky/1connector/compare/v2.3.3...v3.0.0
+          NOTES
+          gh release create v3.0.0 package/1connector-3.0.0.ospx \
+            --target "$RELEASE_COMMIT" \
+            --title '3.0.0 — OneScript 2.2+ и изменения пула соединений' \
+            --notes-file release-notes.md
