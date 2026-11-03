@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/release-3.0.0-once.yml
       - tasks/test-release-3.0.0.os
+      - opm.cfg
 
 permissions:
   contents: read
@@ -33,7 +34,8 @@ jobs:
           git merge-base --is-ancestor "$RELEASE_COMMIT" origin/master
           git diff --exit-code "$RELEASE_COMMIT" HEAD -- . \
             ':(exclude).github/workflows/release-3.0.0-once.yml' \
-            ':(exclude)tasks/test-release-3.0.0.os'
+            ':(exclude)tasks/test-release-3.0.0.os' \
+            ':(exclude)opm.cfg'
           version=$(sed -n 's/.*\.Версия("\([0-9.]*\)").*/\1/p' packagedef)
           test "$version" = 3.0.0
           tags=$(gh api --paginate "repos/$GITHUB_REPOSITORY/tags" --jq '.[].name')
